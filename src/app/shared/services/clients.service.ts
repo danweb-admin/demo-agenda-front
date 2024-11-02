@@ -24,6 +24,13 @@ export class ClientsService {
     }));
   }
 
+  getById(id: string): Observable<Client> {
+    return this.http.get(`${environment.URL_API}${URL_CLIENTS}/by-id?id=${id}`)
+    .pipe(map((resp: Client) => {
+      return resp;
+    }));
+  }
+
   getValueByEquipament(clientId: string, equipamentId: string, startTime: string, endTime: string): Observable<number> {
     return this.http.get(`${environment.URL_API}${URL_CLIENTS}/value-by-equipament?clientId=${clientId}&equipamentId=${equipamentId}&startTime=${startTime}&endTime=${endTime}`)
     .pipe(map((resp: number) => {

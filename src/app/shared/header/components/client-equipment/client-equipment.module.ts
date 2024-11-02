@@ -4,7 +4,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { SharedModule } from '../../shared/shared.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -13,22 +12,23 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxMaskModule, IConfig } from 'ngx-mask'
 import { MatTabsModule } from '@angular/material/tabs';
-import { ClientsRoutingModule } from './clients-routing.module';
-import { ClientsDialogComponent } from './components/clients-dialog/clients-dialog.component';
-import { ClientsTableComponent } from './components/clients-table/clients-table.component';
-import { ClientsPageComponent } from './containers/clients-page/clients-page.component';
-import { ClientsService } from '../../shared/services/clients.service';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { ClientEquipmentRoutingModule } from './client-euipment-routing.module';
+import { ClientEquipmentPageComponent } from './containers/client-equipment-page.component';
+import { ClientEquipmentDialogComponent } from './components/client-equipment-dialog/client-equipment-dialog.component';
+import { ClientEquipmentTableComponent } from './components/client-equipment-table/client-equipment-table.component';
+import { ClientEquipmentService } from 'src/app/shared/services/client-equipment.service';
 
 @NgModule({
   declarations: [
-      ClientsPageComponent,
-      ClientsTableComponent,
-      ClientsDialogComponent,
+      ClientEquipmentPageComponent,
+      ClientEquipmentTableComponent,
+      ClientEquipmentDialogComponent,
   ],
   imports: [
     CommonModule,
-    ClientsRoutingModule,
+    ClientEquipmentRoutingModule,
     MatCardModule,
     MatIconModule,
     MatMenuModule,
@@ -45,7 +45,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     NgxMaskModule.forChild(),
   ],
   providers: [
-    ClientsService
+      ClientEquipmentService
   ]
 })
-export class ClientsModule { }
+export class ClientEquipmentModule { }

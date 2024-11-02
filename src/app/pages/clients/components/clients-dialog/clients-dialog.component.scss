@@ -17,3 +17,22 @@ mat-form-field {
     padding-top: 10px;
     padding-left: 15px;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table, th, td {
+    border-top: 1px dotted black;
+    border-bottom: 1px dotted black;
+}
+th, td {
+    padding: 3px;
+    text-align: center;
+}
+
+th {
+    background-color: gray; /* Alterar para a cor desejada */
+    color: white;
+}
+

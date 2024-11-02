@@ -117,6 +117,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/calendar-consumable/calendar-consumable.module' ).then(m => m.CalendarConsumableModule)
   },
   {
+    path: 'equipamentos-cliente',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./shared/header/components/client-equipment/client-equipment.module' ).then(m => m.ClientEquipmentModule)
+  },
+  {
     path: '**',
     redirectTo: '404'
   }

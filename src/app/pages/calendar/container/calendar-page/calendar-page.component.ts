@@ -20,7 +20,6 @@ export class CalendarPageComponent implements OnInit {
     
   }
   ngOnInit(): void {
-    debugger
     if (this.isDriver){
       this.router.navigate([this.routers.CALENDAR_CONSUMABLE]).then();    
     }

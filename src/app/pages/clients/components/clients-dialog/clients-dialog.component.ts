@@ -1,7 +1,6 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { ToastrService } from 'ngx-toastr';
 import { City } from 'src/app/shared/models/city';
@@ -24,10 +23,22 @@ import { ClientsService } from '../../../../shared/services/clients.service';
     arrayEstados: State[];
     cidades: City[];
     arrayCidades: City[];
+    valuesArray: any[] = [];
+    clientEquipmentArray: any[] = [];
+    clientSpecificationArray: any[] = [];
+    specificationList: any[] = [];
     @ViewChild('estado') selectEstado: MatSelect;
     @ViewChild('cidade') selectCidade: MatSelect;
     @ViewChild('stateInputSearch') stateInputSearch: any;
     @ViewChild('cityInputSearch') cityInputSearch: any;
+    @ViewChild('valueInput') valueInput: any;
+    @ViewChild('spec') spec: any;
+    @ViewChild('hours') hours: any;
+    @ViewChild('specValue') specValue: any;
+
+    expandedIndex: number | null = null;
+    leftColumn: any[] = [];
+    rightColumn: any[] = [];
 
     constructor(
       public dialogRef: MatDialogRef<ClientsDialogComponent>,
@@ -35,10 +46,21 @@ import { ClientsService } from '../../../../shared/services/clients.service';
       private clientService: ClientsService,
       private formBuilder: FormBuilder,
       private toastr: ToastrService,
-      private estadosCidadesService: EstadosCidadesServices) {
+      private estadosCidadesService: EstadosCidadesServices,
+      private cdRef: ChangeDetectorRef) {
+    }
+
+    openPanel(index: number) {
+      if (this.expandedIndex === index) {
+        this.expandedIndex = null;
+      } else {
+        this.expandedIndex = index;
+      }
     }
 
     ngAfterViewInit(): void {
+      this.specificationList = JSON.parse(localStorage.getItem('specificationsList'));
+      
       if (this.data.element?.cityId != null){
         setTimeout(() => {
           this.selectEstado.options.filter(item => item.value == this.data.element?.stateId)[0].select();
@@ -47,8 +69,7 @@ import { ClientsService } from '../../../../shared/services/clients.service';
       this.ajustesCSS();
     }
 
-    ngOnInit(): void {
-      this.getEstados();
+    createForm(){
       this.id = this.data.element;
       this.isAddMode = !this.id;
       this.form = this.formBuilder.group({
@@ -89,10 +110,156 @@ import { ClientsService } from '../../../../shared/services/clients.service';
         hasTechnique: [this.data.element?.hasTechnique],
         techniqueOption1: [this.data.element?.techniqueOption1 || ''],
         techniqueOption2: [this.data.element?.techniqueOption2 || ''],
-        equipamentValues: [this.data.element?.equipamentValues || '']
+        equipamentValues: [this.data.element?.equipamentValues || ''],
+        equipmentValues: this.formBuilder.array(this.valuesArray),
+        clientEquipment: this.formBuilder.array([]),
+        clientSpecifications: this.formBuilder.array([]),
       });
       this.isPhysicalPerson = this.data.element? this.data.element.isPhysicalPerson : false;
     }
+
+    get clientEquipment(): FormArray {
+      return this.form.get('clientEquipment') as FormArray;
+    }
+
+    get clientSpecifications(): FormArray {
+      return this.form.get('clientSpecifications') as FormArray;
+    }
+
+    getTimeValues(equipmentIndex: number): FormArray {
+      return this.clientEquipment.at(equipmentIndex).get('timeValues') as FormArray;
+    }
+
+    ngOnInit(): void {
+      this.getEstados();
+      this.getById(this.data.element?.id);
+      this.createForm();      
+    }
+
+    addSpecValue(event: Event){
+      event.preventDefault();
+    
+      let _specValue = this.specValue.nativeElement.value
+      let _hours = this.hours.nativeElement.value
+      let _spec = this.spec.value
+      let _specText = this.spec.selected?.viewValue
+
+      if (_spec == undefined){
+        this.toastr.warning("Selecione uma Ponteira");
+        return;
+      }
+
+      if (_specValue == "R$ " || _specValue == ""){
+        this.toastr.warning("Informe o Valor da Ponteira");
+        return;
+      }
+
+      if (_hours == ""){
+        this.toastr.warning("Informe o campo Até Quantas Horas");
+        return;
+      }
+
+      const clientSpecForm = this.formBuilder.group({
+        spec: [_spec],
+        specName: [_specText],
+        hours: [_hours],
+        value: [_specValue],
+        clientId: [this.data.element?.id],
+        specificationId: [_spec]
+      });
+
+      this.clientSpecifications.push(clientSpecForm);
+  
+      this.spec.value = ''
+      this.hours.nativeElement.value = '0'
+      this.specValue.nativeElement.value = ''
+      this.cdRef.detectChanges();
+    }
+
+    removeSpecs(event: Event,i){
+      event.preventDefault();
+
+      this.clientSpecifications.removeAt(i);
+    }
+
+    getById(id){
+      if (id == undefined)
+        id = ''
+      this.clientService.getById(id).subscribe((resp: any) => {
+        this.valuesArray = resp.clientEquipment;
+        this.clientSpecificationArray = resp.clientSpecifications;
+
+				this.createValuesForms();
+        this.createClientSpecificationsForms()
+      }); 
+    }
+
+    createValuesForms(){
+      this.valuesArray.forEach(item => {
+				
+				const formGroup = this.formBuilder.group({
+					clientId: [item.clientId],
+					equipmentRelationshipId: [item.equipmentRelationshipId],
+          id: [item.id],
+          name: [item.name],
+					timeValues: this.formBuilder.array([])
+				});
+				
+				this.clientEquipment.push(formGroup);
+        
+        item.timeValues.forEach(timeValue => {
+          this.addTimeValue(this.clientEquipment.length - 1, timeValue);
+        });
+			});
+    }
+
+    createClientEquipmentForms(){
+      this.clientEquipmentArray.forEach(item => {
+				
+				const formGroup = this.formBuilder.group({
+					clientId: [item.clientId],
+					specificationId: [item.equipmentRelationshipId],
+          id: [item.id],
+          name: [item.name],
+					timeValues: this.formBuilder.array([])
+				});
+				
+				this.clientEquipment.push(formGroup);
+        
+        item.timeValues.forEach(timeValue => {
+          this.addTimeValue(this.clientEquipment.length - 1, timeValue);
+        });
+			});
+    }
+
+    createClientSpecificationsForms(){
+      this.clientSpecificationArray.forEach(item => {
+				
+				const formGroup = this.formBuilder.group({
+					clientId: [item.clientId],
+					specificationId: [item.specificationId],
+          id: [item.id],
+          hours: [item.hours],
+          value: [item.value],
+          specName: [item.specification.name]
+				});
+				
+				this.clientSpecifications.push(formGroup);
+			});
+    }
+
+
+    addTimeValue(equipmentIndex: number, timeValue: any = null): void {
+      
+      const timeValueForm = this.formBuilder.group({
+        id: [timeValue.id],
+        time: [timeValue.time],
+        value: [timeValue.value.toFixed(2).replace('.',',')]
+      });
+  
+      this.getTimeValues(equipmentIndex).push(timeValueForm);
+    }
+
 
     onNoClick(): void {
       this.dialogRef.close();
@@ -149,6 +316,7 @@ import { ClientsService } from '../../../../shared/services/clients.service';
     }
 
     onSubmit(){
+      this.adjustFormValues();
       if (this.form.value.id === ""){
         this.clientService.save(this.form.value).subscribe((resp: Client) => {
           this.toastr.success('Cliente adicionado.');
@@ -162,6 +330,48 @@ import { ClientsService } from '../../../../shared/services/clients.service';
       }
     }
 
+    adjustFormValues(){
+			this.clientEquipment.controls.forEach((item) => {
+
+        const timeValues = (item.get('timeValues') as FormArray).controls;
+
+        timeValues.forEach(subItem => {
+          const currentValue = subItem.get('value').value.toString();
+				  const newValue  = currentValue.replace(',', '.');
+          subItem.get('value').patchValue(newValue);
+        });
+			}); 
+
+      this.clientSpecifications.controls.forEach((item) => {
+        const currentValue = item.get('value').value.toString();
+        const newValue  = currentValue.replace('R$ ','').replace(',', '.');
+        item.get('value').patchValue(newValue);
+			}); 
+		}
+
+    applyValue(index){
+      var value = this.valueInput.nativeElement.value.replace('R$ ','');
+      var soma = 0;
+
+      if (value == ""){
+        this.toastr.info("Informe um valor!");
+        return
+      }
+      this.getTimeValues(index).controls.forEach((item, i) => {
+        if (i == 0){
+          const currentValue = item.get('value').value.toString();
+				  const newValue  = currentValue.replace(',', '.');
+          soma +=  parseFloat(newValue);
+        }else{
+          const currentValue = item.get('value').value.toString();
+				  const newValue  = currentValue.replace(',', '.');
+          soma += parseFloat(value.replace(',', '.'));
+          item.get('value').patchValue(soma.toFixed(2).replace('.',','));
+        }
+      })
+      
+    }
+
     ajustesCSS(){
       var mat_select = document.getElementsByClassName('mat-select');
       var mat_dialog = document.getElementsByClassName('mat-dialog-content');
@@ -169,5 +379,15 @@ import { ClientsService } from '../../../../shared/services/clients.service';
       for (var i = 0; i < mat_select.length; i++) {
         mat_select[i].setAttribute('style', 'display: contents');
       }
+    }
+
+    allowOnlyNumbers(event: KeyboardEvent): boolean {
+      const charCode = event.which ? event.which : event.keyCode;
+      // Permite apenas números (0-9)
+      if (charCode < 48 || charCode > 57) {
+        event.preventDefault(); // Bloqueia qualquer outro caractere que não seja número
+        return false;
+      }
+      return true;
     }
   }

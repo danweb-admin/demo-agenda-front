@@ -59,6 +59,7 @@ const moment = _rollupMoment || _moment;
     semCadastro = false;
     @ViewChild('selectIcon') selectIcon;
     selectedtype: any;
+    isVisible: boolean = true; 
     icons: any = [
       {
         id: "0",
@@ -103,7 +104,6 @@ const moment = _rollupMoment || _moment;
       this.loadConsumables();
       this.loadConsumableSpecification();
       this.onChanges();
-      console.log(this.form.value);
       
     }
 
@@ -405,6 +405,7 @@ const moment = _rollupMoment || _moment;
     }
 
     onSubmit(){
+      this.isVisible = false
       this.adjustFormValues();
       
       if (this.form.value.id === ""){
@@ -554,8 +555,9 @@ const moment = _rollupMoment || _moment;
         this.clientService.getValueByEquipament(this.form.value.client.id,this.form.value.equipamentId, this.form.value.startTime1, this.form.value.endTime1).subscribe((resp: number) => {
           for (const field in this.form.controls) { 
             if (field == "value" || field == "totalValue"){
+              
               const control = this.form.get(field);
-              const newValue  = resp.toString().replace('.', ',');
+              const newValue  = resp.toFixed(2).replace('.', ',');
               control.patchValue(newValue);
             } 
           }
@@ -566,14 +568,12 @@ const moment = _rollupMoment || _moment;
     calculateTotalValue(){
       
       let total = 0;
-      const freight = this.form.value.freight;
+      const freight =  this.form.value.freight;
       const discount = this.form.value.discount;
 
       this.calendarEquipamentConsumables.controls.forEach((control) => {
-				
         const currentTotalValue = control.get('totalValue').value.toString();
 				const newTotalValue = currentTotalValue.replace(',', '.');
-        
         
         total += parseFloat(newTotalValue);
         console.log('valor equip:' + newTotalValue  );
@@ -587,15 +587,17 @@ const moment = _rollupMoment || _moment;
         console.log('valor spec:' + newTotalValue  );
 
 			});
-
+      
       const value = this.form.get('value').value;
       const value_ = parseFloat(value.replace(',','.'));
-      
-      total += value_ + freight - discount;
+
+      const freight_ = parseFloat(freight.toString().replace(',', '.'));
+      const discount_ = parseFloat(discount.toString().replace(',', '.'));
+
+      total += value_ + freight_ - discount_;
 
       const control = this.form.get('totalValue');
       const newValue  = total.toString().replace('.', ',');
       control.patchValue(newValue);
-      
     }
   }

@@ -1,0 +1,30 @@
+<h3 mat-dialog-title>Editar Equipamentos por Cliente</h3>
+<div mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+            <input type="hidden" formControlName="clientId">
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nome</mat-label>
+                        <input matInput placeholder="Nome" formControlName="clientName">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="outline" class="form-outline">
+                        <mat-label>Equipamento</mat-label>
+                        <mat-select multiple formControlName="equipmentId" class="input-select" placeholder="Equipamento">
+                            <mat-option *ngFor="let item of array" [value]="item.name">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>  
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="onNoClick()">Cancelar</button>
+    <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="onSubmit()">Salvar</button>
+</div>

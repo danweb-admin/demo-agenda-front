@@ -146,166 +146,255 @@
           <div class="row">
             <div class="col col-2">
               <mat-form-field appearance="outline">
-              <mat-label>Estado</mat-label>
+                <mat-label>Estado</mat-label>
                 <mat-select  formControlName="stateId" (openedChange)="openedState($event)" (selectionChange)="getCidadesByEstado($event.value)" #estado required>
                   <input matInput class="input-estado" placeholder="Digite o estado" (keyup)="onKeyState($event.target.value)" #stateInputSearch>
                   <mat-option  *ngFor="let estado of arrayEstados "
-                            value="{{estado.id}}">
-                    {{estado.nome}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col col-2">
-              <mat-form-field appearance="outline">
+                  value="{{estado.id}}">
+                  {{estado.nome}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col col-2">
+            <mat-form-field appearance="outline">
               <mat-label>Cidade</mat-label>
-                <mat-select #cidade formControlName="cityId" (openedChange)="openedCity()" required>
-                  <input matInput class="input-cidade" placeholder="Digite a cidade" (keyup)="onKeyCity($event.target.value)" #cityInputSearch>
-                  <mat-option *ngFor="let cidade of arrayCidades "
-                            value="{{cidade.id}}">
-                    {{cidade.nome}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-                <mat-checkbox formControlName="active" checked="form.value.active" >Ativo</mat-checkbox>
-            </div>
-          </div>
+              <mat-select #cidade formControlName="cityId" (openedChange)="openedCity()" required>
+                <input matInput class="input-cidade" placeholder="Digite a cidade" (keyup)="onKeyCity($event.target.value)" #cityInputSearch>
+                <mat-option *ngFor="let cidade of arrayCidades "
+                value="{{cidade.id}}">
+                {{cidade.nome}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-      </mat-tab>
-      <mat-tab label="Dados Adicionais">
-        <div class="form-row margin-top-10 tab-dados-adicionais">
-          <div class="row">
-            <div class="col col-2">
-              <mat-form-field appearance="outline">
-                <mat-label>Data Cadastro</mat-label>
-                <input matInput disabled [value]="form.value.createdAt | date: 'd/M/yy, h:mm a'">
-              </mat-form-field>
-            </div>
-            <div class="col col-2">
-              <div class="row">
-                <label class="field-label margin-left-5">Contrato Anual?</label>
-              </div>
-              <mat-radio-group aria-label="Contrato Anual?" formControlName="isAnnualContract">
-                <mat-radio-button class="margin-left-5" [value]="true" >Sim</mat-radio-button>
-                <mat-radio-button class="margin-left-5" [value]="false" >Não</mat-radio-button>
-              </mat-radio-group>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-2">
-              <div class="row">
-                <label class="field-label margin-left-5">Recibo?</label>
-              </div>
-              <mat-radio-group formControlName="isReceipt">
-                <mat-radio-button [value]="0"  class="margin-right-5">Não</mat-radio-button>
-                <mat-radio-button [value]="1"  class="margin-right-5">IR</mat-radio-button>
-                <mat-radio-button [value]="2"  class="margin-right-5">Interno</mat-radio-button>
-              </mat-radio-group>
-            </div>
-            <div class="col col-2">
-              <mat-form-field appearance="outline">
-                <mat-label>Nome recibo</mat-label>
-                <input matInput placeholder="Nome recibo" formControlName="nameForReceipt" maxlength="100">
-              </mat-form-field>
-            </div>
-          </div> 
-          <div class="row">
-            <div class="col col-3">
-              <div class="row">
-                <label class="field-label  margin-left-5">Ar condicionado?</label>
-              </div>
-              <mat-radio-group formControlName="hasAirConditioning">
-                <mat-radio-button [value]="true"   class="margin-right-5">Sim</mat-radio-button>
-                <mat-radio-button [value]="false"  class="margin-right-5">Não</mat-radio-button>
-              </mat-radio-group>
-            </div>
-            <div class="col col-3">
-              <div class="row">
-                <label class="field-label margin-left-5">Transformador?</label>
-              </div>
-              <mat-radio-group formControlName="takeTransformer">
-                <mat-radio-button [value]="true" class="margin-right-5">Sim</mat-radio-button>
-                <mat-radio-button [value]="false" class="margin-right-5">Não</mat-radio-button>
-              </mat-radio-group>
-            </div>
-            <div class="col col-3 ">
-              <div class="row">
-                <label class="field-label margin-left-5">Tomada 220v?</label>
-              </div>
-              <mat-radio-group formControlName="has220V">
-                <mat-radio-button [value]="true" class="margin-right-5">Sim</mat-radio-button>
-                <mat-radio-button [value]="false" class="margin-right-5">Não</mat-radio-button>
-              </mat-radio-group>
-            </div>
-          </div>
-          <div class="row margin-top-10">
-            <div class="col col-3">
-              <div class="row">
-                <label class="field-label margin-left-5">Tem escada?</label>
-              </div>
-              <mat-radio-group formControlName="hasStairs">
-                <mat-radio-button [value]="true" class="margin-right-5">Sim</mat-radio-button>
-                <mat-radio-button [value]="false" class="margin-right-5">Não</mat-radio-button>
-              </mat-radio-group>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-3 margin-top-10">
-              <div class="row">
-                <label class="field-label margin-left-5">Tem técnica?</label>
-              </div>
-              <mat-radio-group formControlName="hasTechnique">
-                <mat-radio-button [value]="true" class="margin-right-5">Sim</mat-radio-button>
-                <mat-radio-button [value]="false" class="margin-right-5">Não</mat-radio-button>
-              </mat-radio-group>
-            </div>
-            <div class="col col-3 margin-top-10">
-              <mat-form-field appearance="outline">
-                <mat-label>Opção 1</mat-label>
-                <input matInput placeholder="Opção 1" formControlName="techniqueOption1" maxlength="30">
-              </mat-form-field>
-            </div>
-            <div class="col col-3 margin-top-10">
-              <mat-form-field appearance="outline">
-                <mat-label>Opção 2</mat-label>
-                <input matInput placeholder="Opção 2" formControlName="techniqueOption2" maxlength="30">
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-3">
-              <mat-form-field appearance="outline">
-                <mat-label>Desconto</mat-label>
-                <input matInput placeholder="Desconto" formControlName="discount" prefix="R$ " mask="separator.2" thousandSeparator=".">
-              </mat-form-field>
-              
-            </div>
-            <div class="col col-3">
-              <mat-form-field appearance="outline">
-                <mat-label>Frete</mat-label>
-                <input matInput placeholder="Frete" formControlName="freight" prefix="R$ " mask="separator.2" thousandSeparator="." >
-              </mat-form-field>
-            </div>
-          </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-checkbox formControlName="active" checked="form.value.active" >Ativo</mat-checkbox>
         </div>
-      </mat-tab>
-      <mat-tab label="Valores">
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Dados Adicionais">
+    <div class="form-row margin-top-10 tab-dados-adicionais">
+      <div class="row">
+        <div class="col col-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Data Cadastro</mat-label>
+            <input matInput disabled [value]="form.value.createdAt | date: 'd/M/yy, h:mm a'">
+          </mat-form-field>
+        </div>
+        <div class="col col-2">
+          <div class="row">
+            <label class="field-label margin-left-5">Contrato Anual?</label>
+          </div>
+          <mat-radio-group aria-label="Contrato Anual?" formControlName="isAnnualContract">
+            <mat-radio-button class="margin-left-5" [value]="true" >Sim</mat-radio-button>
+            <mat-radio-button class="margin-left-5" [value]="false" >Não</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-2">
+          <div class="row">
+            <label class="field-label margin-left-5">Recibo?</label>
+          </div>
+          <mat-radio-group formControlName="isReceipt">
+            <mat-radio-button [value]="0"  class="margin-right-5">Não</mat-radio-button>
+            <mat-radio-button [value]="1"  class="margin-right-5">IR</mat-radio-button>
+            <mat-radio-button [value]="2"  class="margin-right-5">Interno</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col col-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Nome recibo</mat-label>
+            <input matInput placeholder="Nome recibo" formControlName="nameForReceipt" maxlength="100">
+          </mat-form-field>
+        </div>
+      </div> 
+      <div class="row">
+        <div class="col col-3">
+          <div class="row">
+            <label class="field-label  margin-left-5">Ar condicionado?</label>
+          </div>
+          <mat-radio-group formControlName="hasAirConditioning">
+            <mat-radio-button [value]="true"   class="margin-right-5">Sim</mat-radio-button>
+            <mat-radio-button [value]="false"  class="margin-right-5">Não</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col col-3">
+          <div class="row">
+            <label class="field-label margin-left-5">Transformador?</label>
+          </div>
+          <mat-radio-group formControlName="takeTransformer">
+            <mat-radio-button [value]="true" class="margin-right-5">Sim</mat-radio-button>
+            <mat-radio-button [value]="false" class="margin-right-5">Não</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col col-3 ">
+          <div class="row">
+            <label class="field-label margin-left-5">Tomada 220v?</label>
+          </div>
+          <mat-radio-group formControlName="has220V">
+            <mat-radio-button [value]="true" class="margin-right-5">Sim</mat-radio-button>
+            <mat-radio-button [value]="false" class="margin-right-5">Não</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="row margin-top-10">
+        <div class="col col-3">
+          <div class="row">
+            <label class="field-label margin-left-5">Tem escada?</label>
+          </div>
+          <mat-radio-group formControlName="hasStairs">
+            <mat-radio-button [value]="true" class="margin-right-5">Sim</mat-radio-button>
+            <mat-radio-button [value]="false" class="margin-right-5">Não</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-3 margin-top-10">
+          <div class="row">
+            <label class="field-label margin-left-5">Tem técnica?</label>
+          </div>
+          <mat-radio-group formControlName="hasTechnique">
+            <mat-radio-button [value]="true" class="margin-right-5">Sim</mat-radio-button>
+            <mat-radio-button [value]="false" class="margin-right-5">Não</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col col-3 margin-top-10">
+          <mat-form-field appearance="outline">
+            <mat-label>Opção 1</mat-label>
+            <input matInput placeholder="Opção 1" formControlName="techniqueOption1" maxlength="30">
+          </mat-form-field>
+        </div>
+        <div class="col col-3 margin-top-10">
+          <mat-form-field appearance="outline">
+            <mat-label>Opção 2</mat-label>
+            <input matInput placeholder="Opção 2" formControlName="techniqueOption2" maxlength="30">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Desconto</mat-label>
+            <input matInput placeholder="Desconto" formControlName="discount" prefix="R$ " mask="separator.2" thousandSeparator=".">
+          </mat-form-field>
+          
+        </div>
+        <div class="col col-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Frete</mat-label>
+            <input matInput placeholder="Frete" formControlName="freight" prefix="R$ " mask="separator.2" thousandSeparator="." >
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Valores">
+    <mat-form-field appearance="outline">
+      <mat-label>Valores e Aparelhos</mat-label>
+      <textarea matInput
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="19"
+      cdkAutosizeMaxRows="40" formControlName="equipamentValues"></textarea>
+    </mat-form-field>
+  </mat-tab>
+  <mat-tab label="Ponteiras">
+    <div class="row">
+      <div class="col col-4">
         <mat-form-field appearance="outline">
-          <mat-label>Valores e Aparelhos</mat-label>
-          <textarea matInput
-            cdkTextareaAutosize
-            #autosize="cdkTextareaAutosize"
-            cdkAutosizeMinRows="19"
-            cdkAutosizeMaxRows="40" formControlName="equipamentValues"></textarea>
+          <mat-label>Ponteira</mat-label>
+          <mat-select style="display: contents;" #spec>
+            <mat-option *ngFor="let item of specificationList" [value]="item.id">{{item.name}}</mat-option>
+          </mat-select>
         </mat-form-field>
-      </mat-tab>
-    </mat-tab-group>
+      </div>
+      <div class="col col-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Até Quantas Horas</mat-label>
+          <input matInput placeholder="" (keypress)="allowOnlyNumbers($event)" #hours>
+        </mat-form-field>
+        
+      </div>
+      <div class="col col-4">
+        <mat-form-field appearance="outline" >
+          <mat-label>Valor</mat-label>
+          <input matInput placeholder="Valor" prefix="R$ " mask="separator.2" thousandSeparator="." #specValue>
+        </mat-form-field>
+      </div>
+      <div class="col col-4">
+        <button mat-raised-button color="primary" (click)="addSpecValue($event)" style="margin-top:10px ;">Inserir</button>
+      </div>
+    </div>
+    <div class="row">
+      <span style="margin-left: 15px; font-size: 12px;" >Se o valor for igual para todas as horas, informar o campo "Até Quantas Horas": 0</span>
+      <table>
+        <thead>
+          <tr>
+            <th>Ponteira</th>
+            <th>Horas</th>
+            <th>Valor</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody formArrayName="clientSpecifications">
+          <tr *ngFor="let spec of clientSpecifications.controls; let i = index" [formGroupName]="i">
+            <td>{{this.clientSpecifications.at(i).get('specName').value}}</td>
+            <td>{{this.clientSpecifications.at(i).get('hours').value}}</td>
+            <td>{{this.clientSpecifications.at(i).get('value').value}}</td>
+            <td><button color="warn" style="background-color: white; border: 0;" (click)="removeSpecs($event,i)">
+              <mat-icon style="background-color: white;">delete</mat-icon>
+            </button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-tab>
+  <mat-tab label="Valores2" >
+    <div class="row" >
+      <mat-accordion class="example-headers-align" multi>
+        <div formArrayName="clientEquipment">
+          <ng-container *ngFor="let equipment of clientEquipment.controls; let i = index" [formGroupName]="i">
+            <mat-expansion-panel style="overflow-y: auto; min-height: 30px; max-height: 300px; width: 50%; float: left;" [expanded]="expandedIndex === i" (opened)="openPanel(i)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{clientEquipment.controls[i].get('name').value}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              
+              <div class="row">
+                <div class="col col-2">
+                  <table >
+                    <thead>
+                      <tr>
+                        <th>Tempo</th>
+                        <th>Valor</th>
+                      </tr>
+                    </thead>
+                    <tbody formArrayName="timeValues">
+                      <tr *ngFor="let timeValue of getTimeValues(i).controls; let j = index" [formGroupName]="j">
+                        <td>{{ getTimeValues(i).controls[j].get('time').value}}</td>
+                        <td><input type="text" formControlName="value"  prefix="R$ " mask="separator.2" thousandSeparator="."></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </ng-container>
+        </div>
+        
+      </mat-accordion>
+    </div>
     
-  </form>
+  </mat-tab>
+</mat-tab-group>
+
+</form>
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button color="warn" (click)="onNoClick()">Cancelar</button>

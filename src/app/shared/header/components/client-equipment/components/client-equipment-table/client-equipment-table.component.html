@@ -1,0 +1,46 @@
+<mat-card class="client-equipment-table">
+    <mat-card-title class="client-equipment-table__header">
+        <h5 class="client-equipment-table__title">Equipamentos por Cliente</h5>
+        
+        <div class="row">
+            <div class="client-equipment-table-wrapper__search">
+                <div class="client-equipment-table-wrapper__icon-wrapper">
+                    <mat-icon class="client-equipment-table-wrapper__icon">search</mat-icon>
+                </div>
+                <input matInput class="client-equipment-table-wrapper__search-input" #inputSearch (keyup)="applyFilter($event)">
+                <button class="client-equipment-table-wrapper__button" mat-mini-fab (click)="closeFilterInput()">
+                    <mat-icon class="client-equipment-table-wrapper__icon">close</mat-icon>
+                </button>
+            </div>
+            <button mat-icon-button (click)="openDialog(null)">
+                <mat-icon>control_point</mat-icon>
+            </button>
+        </div>
+        
+    </mat-card-title>
+    
+    <mat-card-content >
+        
+        <table class="client-equipment-table__table" mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="nome" >
+                <th class="client-equipment-table__table-header" mat-header-cell *matHeaderCellDef > NOME </th>
+                <td class="client-equipment-table__table-body" mat-cell *matCellDef="let element"> {{element.clientName}} </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="equipamentos" >
+                <th class="client-equipment-table__table-header" mat-header-cell *matHeaderCellDef > EQUIPAMENTOS </th>
+                <td class="client-equipment-table__table-body" mat-cell *matCellDef="let element"> {{element.equipNames}} </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            (click)="openDialog(row)">
+        </tr>
+    </table>
+    
+    <div class="pagination">
+        <mat-paginator [pageSizeOptions]="[10, 15, 100]" showFirstLastButtons></mat-paginator>
+    </div>
+</mat-card-content>
+</mat-card>
+
