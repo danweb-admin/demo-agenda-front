@@ -22,9 +22,6 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from 'src/app/consts/my-format';
 import { Consumable } from 'src/app/shared/models/consumable';
 import { ConsumablesService } from 'src/app/shared/services/consumables.service';
-import { EquipamentConsumable } from 'src/app/shared/models/equipamentConsumable';
-import { CalendarEquipamentConsumable } from 'src/app/shared/models/calendarEquipamentConsumable';
-import { CalendarSpecificationConsumable } from 'src/app/shared/models/calendarSpecificationConsumable';
 
 const moment = _rollupMoment || _moment;
 

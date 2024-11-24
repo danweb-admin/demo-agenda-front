@@ -5,3 +5,4 @@ export * from './server-chart/server-chart.component';
 export * from './daily-line-chart/daily-line-chart.component';
 export * from './support-requests/support-requests.component';
 export * from './project-stat-chart/project-stat-chart.component';
+export * from './locacoes-chart/locacoes-chart.component';

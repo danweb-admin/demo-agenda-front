@@ -13,6 +13,7 @@ import {
 import { DailyLineChartData, TimeData } from '../../models';
 import { colors } from '../../../../consts';
 import { customTooltip } from '../../consts';
+import ApexCharts from 'apexcharts';
 
 type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -64,6 +65,7 @@ export class DailyLineChartComponent implements OnInit, AfterViewInit {
   }
 
   public initChart(data: TimeData, labels: string[]): void {
+    debugger
     this.chartOptions = {
       legend: {
         show: false
