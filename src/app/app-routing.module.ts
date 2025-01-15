@@ -122,6 +122,11 @@ const routes: Routes = [
     loadChildren: () => import('./shared/header/components/client-equipment/client-equipment.module' ).then(m => m.ClientEquipmentModule)
   },
   {
+    path: 'agenda-em-lote',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/bulk-scheduling/bulk-scheduling.module' ).then(m => m.BulkSchedulingModule)
+  },
+  {
     path: '**',
     redirectTo: '404'
   }

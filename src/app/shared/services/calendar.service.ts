@@ -94,6 +94,13 @@ export class CalendarService {
       return resp;
     }));
   }
+
+  bulkScheduling(bulkScheduling: any): Observable<any>{
+    return this.http.post(`${environment.URL_API}${URL_CALENDARS}/bulk-scheduling`,bulkScheduling)
+    .pipe(map((resp: Calendar) => {
+      return resp;
+    }))
+  }
 }
 
 
