@@ -123,7 +123,7 @@ export class AvailabilityTableComponent implements OnInit, AfterViewInit {
 			var link = document.createElement("a");
 			document.body.appendChild(link);
 			link.download = "html_image.png";
-			link.href = canvas.toDataURL("image/png");
+			link.href = canvas.toDataURL("image/jpg");
 			link.target = '_blank';
 			link.click();
 		});
