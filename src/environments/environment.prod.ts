@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  URL_API: 'http://44.203.158.122:32100',
+  URL_API: 'http://demonstracao-back-svc.demonstracao.svc.cluster.local',
   hmr: false,
   role: ''
 };
