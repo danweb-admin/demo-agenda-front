@@ -42,7 +42,6 @@ export class Interceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       finalize(() => this.spinnerService.hide()),
       catchError((error: HttpErrorResponse) => {
-
         this.showError(error);
         // this.spinnerService.hide();
         return throwError(error);
@@ -61,6 +60,10 @@ export class Interceptor implements HttpInterceptor {
       case 401: //Unauthorized
         this.router.navigate([this.routers.LOGIN]).then();
         this.toastr.error('Faça o login novamente');
+        this.removeDialog();
+        break;
+      case 404:
+        this.toastr.warning(error.error);
         this.removeDialog();
         break;
       case 500: //InternalServerError

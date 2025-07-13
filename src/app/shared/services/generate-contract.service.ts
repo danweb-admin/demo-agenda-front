@@ -4,6 +4,8 @@ import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 const URL_GENERATE_CONTRACT = '/api/v1/generate-contract';
+const URL_DIGITAL_SIGNATURE = '/api/v1/assinatura-digital';
+
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +36,19 @@ export class GenerateContractService {
 
   downloadContract(id) {
     return this.http.get(`${environment.URL_API}${URL_GENERATE_CONTRACT}/download-contract?id=${id}`, { responseType: 'blob' });
+  }
+
+  digitalSignature(id) {
+    return this.http.get(`${environment.URL_API}${URL_DIGITAL_SIGNATURE}/?calendarId=${id}`)
+    .pipe(map((resp: any) => {
+      return resp;
+    }));
+  }
+
+  history(id){
+    return this.http.get(`${environment.URL_API}${URL_DIGITAL_SIGNATURE}/historico?calendarId=${id}`)
+    .pipe(map((resp: any) => {
+      return resp;
+    }));
   }
 }

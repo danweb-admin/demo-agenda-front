@@ -14,7 +14,7 @@ export class LoginFormComponent implements OnInit {
   public email = '';
   public password = '';
 
-  constructor(private authService: AuthService){}
+  constructor(private authService: AuthService, private toastr: ToastrService){}
 
   public ngOnInit(): void {
     this.form = new FormGroup({
@@ -29,6 +29,10 @@ export class LoginFormComponent implements OnInit {
         if (resp?.name){
           this.sendLoginForm.emit();
         }
+      },
+      (error: any) =>{
+        console.log(error);
+        this.toastr.warning(error.error.message)
       });
     }
   }

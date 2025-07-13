@@ -293,16 +293,7 @@
       </div>
     </div>
   </mat-tab>
-  <mat-tab label="Valores">
-    <mat-form-field appearance="outline">
-      <mat-label>Valores e Aparelhos</mat-label>
-      <textarea matInput
-      cdkTextareaAutosize
-      #autosize="cdkTextareaAutosize"
-      cdkAutosizeMinRows="19"
-      cdkAutosizeMaxRows="40" formControlName="equipamentValues"></textarea>
-    </mat-form-field>
-  </mat-tab>
+  
   <mat-tab label="Ponteiras">
     <div class="row">
       <div class="col col-4">
@@ -354,7 +345,7 @@
       </table>
     </div>
   </mat-tab>
-  <mat-tab label="Valores2" >
+  <mat-tab label="Valores" >
     <div class="row" >
       <mat-accordion class="example-headers-align" multi>
         <div formArrayName="clientEquipment">
@@ -391,6 +382,63 @@
       </mat-accordion>
     </div>
     
+  </mat-tab>
+  <mat-tab label="Signatários">
+    <div class="row">
+      <div class="col col-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput placeholder=""  #nome>
+        </mat-form-field>
+      </div>
+      <div class="col col-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder=""  #email>
+        </mat-form-field>
+        
+      </div>
+      <div class="col col-4">
+        <mat-form-field appearance="outline" >
+          <mat-label>Parte</mat-label>
+          <mat-select style="display: contents;" #parte>
+            <mat-option value="locatario">Locatário</mat-option>
+            <mat-option value="contratante">Contratante</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col col-4">
+        
+        <mat-checkbox #pf style="margin-right: 10px;">PF?</mat-checkbox>
+        <button mat-raised-button color="primary" (click)="addSignatario($event)" style="margin-top:10px ;">Inserir</button>
+      </div>
+      <div class="row">
+      
+      <table>
+        <thead>
+          <tr>
+            <th >Nome</th>
+            <th>Email</th>
+            <th>Parte</th>
+            <th>PF?</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody formArrayName="clientDigitalSignatures">
+          <tr *ngFor="let spec of clientDigitalSignatures.controls; let i = index" [formGroupName]="i">
+            <td style="text-align: left; padding-left: 15px;">{{this.clientDigitalSignatures.at(i).get('name').value}}</td>
+            <td style="text-align: left; padding-left: 15px;">{{this.clientDigitalSignatures.at(i).get('email').value}}</td>
+            <td style="text-align: left; padding-left: 15px;">{{this.clientDigitalSignatures.at(i).get('partyName').value}}</td>
+            <td>{{describeIsPF(this.clientDigitalSignatures.at(i).get('isPF').value)}}</td>
+            <td><button color="warn" style="background-color: white; border: 0;" (click)="removeSignatarios($event,i)">
+              <mat-icon style="background-color: white;">delete</mat-icon>
+            </button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    </div>
   </mat-tab>
 </mat-tab-group>
 

@@ -18,11 +18,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { GenerateContractPageComponent } from './containers/generate-contract-page/generate-contract-page.component';
 import { GenerateContractRoutingModule } from './generate-contract-routing.module';
 import { GenerateContractTableComponent } from './components/generate-contract-table/generate-contract-table.component';
+import { SignatureHistoryComponent } from './components/signature-history/signature-history.component';
 
 @NgModule({
   declarations: [
       GenerateContractPageComponent,
-      GenerateContractTableComponent
+      GenerateContractTableComponent,
+      SignatureHistoryComponent
   ],
   imports: [
     CommonModule,

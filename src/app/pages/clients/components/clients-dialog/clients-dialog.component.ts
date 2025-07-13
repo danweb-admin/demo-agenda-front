@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
@@ -8,6 +8,9 @@ import { State } from 'src/app/shared/models/state';
 import { EstadosCidadesServices } from 'src/app/shared/services/estados-cidades.service';
 import { Client } from '../../../../shared/models/client';
 import { ClientsService } from '../../../../shared/services/clients.service';
+import { log } from 'console';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { Guid } from 'guid-typescript';
 
 @Component({
     selector: 'app-clients-dialog',
@@ -26,6 +29,7 @@ import { ClientsService } from '../../../../shared/services/clients.service';
     valuesArray: any[] = [];
     clientEquipmentArray: any[] = [];
     clientSpecificationArray: any[] = [];
+    clientDigitalSignaturesArray: any[] = [];
     specificationList: any[] = [];
     @ViewChild('estado') selectEstado: MatSelect;
     @ViewChild('cidade') selectCidade: MatSelect;
@@ -35,6 +39,10 @@ import { ClientsService } from '../../../../shared/services/clients.service';
     @ViewChild('spec') spec: any;
     @ViewChild('hours') hours: any;
     @ViewChild('specValue') specValue: any;
+    @ViewChild('nome') nome: any;
+    @ViewChild('email') email: any;
+    @ViewChild('parte') parte: any;
+    @ViewChild('pf') pf: MatCheckbox;
 
     expandedIndex: number | null = null;
     leftColumn: any[] = [];
@@ -114,6 +122,8 @@ import { ClientsService } from '../../../../shared/services/clients.service';
         equipmentValues: this.formBuilder.array(this.valuesArray),
         clientEquipment: this.formBuilder.array([]),
         clientSpecifications: this.formBuilder.array([]),
+        clientDigitalSignatures: this.formBuilder.array([]),
+
       });
       this.isPhysicalPerson = this.data.element? this.data.element.isPhysicalPerson : false;
     }
@@ -126,6 +136,10 @@ import { ClientsService } from '../../../../shared/services/clients.service';
       return this.form.get('clientSpecifications') as FormArray;
     }
 
+    get clientDigitalSignatures(): FormArray {
+      return this.form.get('clientDigitalSignatures') as FormArray;
+    }
+
     getTimeValues(equipmentIndex: number): FormArray {
       return this.clientEquipment.at(equipmentIndex).get('timeValues') as FormArray;
     }
@@ -133,7 +147,7 @@ import { ClientsService } from '../../../../shared/services/clients.service';
     ngOnInit(): void {
       this.getEstados();
       this.getById(this.data.element?.id);
-      this.createForm();      
+      this.createForm();    
     }
 
     addSpecValue(event: Event){
@@ -176,10 +190,74 @@ import { ClientsService } from '../../../../shared/services/clients.service';
       this.cdRef.detectChanges();
     }
 
+    addSignatario(event: Event){
+      event.preventDefault();
+      
+      let nome = this.nome.nativeElement.value
+      let email = this.email.nativeElement.value
+      let parte = this.parte.value
+      let pf = this.pf.checked
+
+      if (nome == undefined || nome == ""){
+        this.toastr.warning("Informe o Nome");
+        return;
+      }
+ 
+      if (email == undefined || email == ""){
+        this.toastr.warning("Informe o Email");
+        return;
+      }
+
+      if (!this.validarEmail()){
+        this.toastr.warning("Email é inválido");
+        return;
+      }
+
+      let clientId = this.form.value.id;
+
+      const formGroup = this.formBuilder.group({
+					clientId: [clientId],
+          id: [Guid.create().toString()],
+					active: [true],
+          email:[email],
+          isPF: [pf],
+          name: [nome],
+          partyName: [parte],
+          createdAt: [new Date()]
+
+				});
+
+      this.clientDigitalSignatures.push(formGroup);
+  
+      this.nome.nativeElement.value = ''
+      this.email.nativeElement.value = ''
+      this.parte.value = ''
+      debugger
+      this.pf.checked = false;
+      this.cdRef.detectChanges();
+    }
+
+    validarEmail() {
+      const valor = this.email.nativeElement.value;
+      const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (regexEmail.test(valor)) {
+        return true
+      } else {
+        return false
+      }
+    }
+
     removeSpecs(event: Event,i){
       event.preventDefault();
 
       this.clientSpecifications.removeAt(i);
+    }
+
+    removeSignatarios(event: Event,i){
+      event.preventDefault();
+
+      this.clientDigitalSignatures.removeAt(i);
     }
 
     getById(id){
@@ -188,9 +266,12 @@ import { ClientsService } from '../../../../shared/services/clients.service';
       this.clientService.getById(id).subscribe((resp: any) => {
         this.valuesArray = resp.clientEquipment;
         this.clientSpecificationArray = resp.clientSpecifications;
+        this.clientDigitalSignaturesArray = resp.clientDigitalSignatures;
 
 				this.createValuesForms();
-        this.createClientSpecificationsForms()
+        this.createClientSpecificationsForms();
+        this.createClientDigitalSignaturesForms();
+
       }); 
     }
 
@@ -246,6 +327,30 @@ import { ClientsService } from '../../../../shared/services/clients.service';
 				
 				this.clientSpecifications.push(formGroup);
 			});
+    }
+
+    createClientDigitalSignaturesForms(){
+      this.clientDigitalSignaturesArray.forEach(item => {
+				const formGroup = this.formBuilder.group({
+					clientId: [item.clientId],
+					active: [item.active],
+          email:[item.email],
+          id:[item.id],
+          isPF: [item.isPF],
+          name: [item.name],
+          partyName: [item.partyName],
+          createdAt: [item.createdAt]
+
+				});
+				
+				this.clientDigitalSignatures.push(formGroup);
+			});
+    }
+
+    describeIsPF(value){
+      if (value)
+        return 'Sim'
+      return 'Não'
     }
 
 

@@ -1,0 +1,21 @@
+<h3  mat-dialog-title>Histórico da Assinatura</h3>
+<div mat-dialog-content>
+  <table class="signature-history-table__table">
+            <thead>
+                <tr>
+                    <th class="signature-history-table__table-row-title">DATA</th>
+                    <th class="signature-history-table__table-row-title">EVENTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of dataSource"  class="signature-history-table__row">
+                    <td class="signature-history-table__cell">{{item.dataHoraAtual | date:'dd/MM/yyyy HH:mm'}}</td>
+                    <td class="signature-history-table__cell">{{item.evento}}</td>
+                    
+                </tr>
+            </tbody>
+        </table>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="warn" (click)="onNoClick()">Cancelar</button>
+</div>

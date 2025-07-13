@@ -43,6 +43,8 @@
                     <td class="generate-contract-table__cell">
                         <button mat-raised-button color="primary" (click)="generateContract(item.id)">Gerar</button>
                         <button mat-raised-button color="basic" [disabled]="!item.contractPath" (click)="downloadContract(item)">Download</button>
+                        <button mat-raised-button color="basic" [disabled]="!item.contractPath" (click)="digitalSignature(item)" style="background-color: lightgreen;">Enviar P/ Assinatura</button>
+                        <button mat-raised-button color="basic" [disabled]="!item.contractPath" (click)="history(item)" style="background-color: cornsilk;">Histórico Assinatura</button>
 
                     </td>
                 </tr>
