@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  URL_API: 'http://agenda-api:80',
+  URL_API: 'http://localhost:5000',
   hmr: false,
   role: ''
 };
