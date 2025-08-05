@@ -126,7 +126,7 @@
             <div class="col col-3">
               <mat-form-field appearance="outline">
                 <mat-label>Final</mat-label>
-                <input matInput placeholder="Final" formControlName="endTime1" mask="00:00" (blur)="onBlur2($event)">
+                <input matInput placeholder="Final" formControlName="endTime1" mask="00:00" (blur)="onBlur($event)">
               </mat-form-field>
             </div>
           </div>
@@ -178,7 +178,7 @@
             <div class="col col-4">
               <mat-form-field appearance="outline">
                 <mat-label>Valor Locação</mat-label>
-                <input matInput placeholder="Valor Locação" formControlName="value" prefix="R$ " mask="separator.2" thousandSeparator="." >
+                <input matInput placeholder="Valor Locação" formControlName="value" prefix="R$ " mask="separator.2" thousandSeparator="." (blur)="calculateTotalValue()">
               </mat-form-field>
             </div>
             <div class="col col-4">
