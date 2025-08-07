@@ -232,7 +232,6 @@ import { Guid } from 'guid-typescript';
       this.nome.nativeElement.value = ''
       this.email.nativeElement.value = ''
       this.parte.value = ''
-      debugger
       this.pf.checked = false;
       this.cdRef.detectChanges();
     }

@@ -65,7 +65,7 @@ export class DailyLineChartComponent implements OnInit, AfterViewInit {
   }
 
   public initChart(data: TimeData, labels: string[]): void {
-    debugger
+    
     this.chartOptions = {
       legend: {
         show: false

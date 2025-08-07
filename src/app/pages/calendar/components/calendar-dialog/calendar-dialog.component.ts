@@ -195,7 +195,7 @@ const moment = _rollupMoment || _moment;
         discount: this.inputReadonly ? [{value: this.data.element?.discount.toFixed(2).replace('.',',') || 0, disabled: true}] : [{value: this.data.element?.discount.toFixed(2).replace('.',',') || 0, disabled: false}],
         freight: this.inputReadonly ? [{value: this.data.element?.freight.toFixed(2).replace('.',',') || 0, disabled: true}] : [{value: this.data.element?.freight.toFixed(2).replace('.',',') || 0, disabled: false}],
         totalValue: [{value: this.data.element?.totalValue.toFixed(2).replace('.',',') || 0, disabled: true}],
-        value: [{value: this.data.element?.value.toFixed(2).replace('.',',') || 0}],
+        value: this.inputReadonly ? [{value: this.data.element?.value.toFixed(2).replace('.',',') || 0, disabled: true}] : [{value: this.data.element?.value.toFixed(2).replace('.',',') || 0, disabled: false}],
         travelOn: this.inputReadonly ? [{value: this.data.element?.travelOn || 0, disabled: true}] : [{value: this.data.element?.travelOn || 0, disabled: false}],
         date: this.inputReadonly ? [{value: this.data.element?.date || null,disabled: true},Validators.required] : [{value: this.data.element?.date || null, disabled: false},Validators.required],
         startTime1:this.inputReadonly ? [{value: this.data.element?.startTime.substring(11,16), disabled: true}] : [this.data.element?.startTime.substring(11,16) || null,Validators.required],
