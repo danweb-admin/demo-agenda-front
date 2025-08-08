@@ -203,6 +203,9 @@ const moment = _rollupMoment || _moment;
         status: this.inputReadonly ? [{value: this.data.element?.status || '2', disabled: true}] : [{value: this.data.element?.status || '2', disabled: false}],
         equipamentId: this.inputReadonly ?  [{value: this.data.element?.equipamentId || null, disabled: true} ,Validators.required] : [{value: this.data.element?.equipamentId || null, disabled: false} ,Validators.required],
         temporaryName: this.inputReadonly ? [{value: this.data.element?.temporaryName, disabled: true}] : [{value: this.data.element?.temporaryName, disabled: false}],
+        others: this.inputReadonly ? [{value: this.data.element?.others.toFixed(2).replace('.',',') || 0, disabled: true}] : [{value: this.data.element?.others.toFixed(2).replace('.',',') || 0, disabled: false}],
+        paymentStatus: this.inputReadonly ? [{value: this.data.element?.paymentStatus, disabled: true}] : [{value: this.data.element?.paymentStatus, disabled: false}],
+        paymentMethods: this.inputReadonly ? [{value: this.data.element?.paymentMethods, disabled: true}] : [{value: this.data.element?.paymentMethods, disabled: false}],
         calendarSpecifications:  this.formBuilder.array(this.data.element?.calendarSpecifications ? array : []),
         calendarEquipamentConsumables: this.formBuilder.array(this.consumableArray),
         calendarSpecificationConsumables: this.formBuilder.array(this.consumableSpecificationArray)
@@ -454,7 +457,7 @@ const moment = _rollupMoment || _moment;
       
       for (const field in this.form.controls) { // 'field' is a string
         
-        if (field == "discount" || field == "freight" || field == "totalValue" || field == "value"){
+        if (field == "discount" || field == "freight" || field == "totalValue" || field == "value" || field == "others" ){
           const control = this.form.get(field);
           const currentValue = control.value.toString();
 				  const newValue  = currentValue.replace(',', '.');
@@ -584,6 +587,9 @@ const moment = _rollupMoment || _moment;
         console.log('valor spec:' + newTotalValue  );
 
 			});
+
+      const others = this.form.get('others').value;
+      const others_ = parseFloat(others.replace(',','.'));
       
       const value = this.form.get('value').value;
       const value_ = parseFloat(value.replace(',','.'));
@@ -591,7 +597,7 @@ const moment = _rollupMoment || _moment;
       const freight_ = parseFloat(freight.toString().replace(',', '.'));
       const discount_ = parseFloat(discount.toString().replace(',', '.'));
 
-      total += value_ + freight_ - discount_;
+      total += value_ + freight_ - discount_ - others_;
 
       const control = this.form.get('totalValue');
       const newValue  = total.toString().replace('.', ',');

@@ -162,6 +162,7 @@
               </mat-form-field>
             </div>
           </div>
+          
           <div class="row" *ngIf="isVisible">
             <div class="col col-4">
               <mat-form-field appearance="outline">
@@ -175,13 +176,44 @@
                 <input matInput placeholder="Frete" formControlName="freight" prefix="R$ " mask="separator.2" thousandSeparator="." (blur)="calculateTotalValue()">
               </mat-form-field>
             </div>
+            
+            <div class="col col-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Outros Valores(-)</mat-label>
+                <input matInput placeholder="Outros Valores" formControlName="others" prefix="R$ " mask="separator.2" thousandSeparator="." (blur)="calculateTotalValue()">
+              </mat-form-field>
+            </div>
             <div class="col col-4">
               <mat-form-field appearance="outline">
                 <mat-label>Valor Locação</mat-label>
                 <input matInput placeholder="Valor Locação" formControlName="value" prefix="R$ " mask="separator.2" thousandSeparator="." (blur)="calculateTotalValue()">
               </mat-form-field>
             </div>
-            <div class="col col-4">
+            
+          </div>
+          <div class="row">
+            <div class="col col-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Status Pagamento</mat-label>
+                <mat-select formControlName="paymentStatus" >
+                  <mat-option value="paid">Pago</mat-option>
+                  <mat-option value="pending">Pendente</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col col-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Forma de Pagamento</mat-label>
+                <mat-select formControlName="paymentMethods" >
+                  <mat-option value="dinheiro">Dinheiro</mat-option>
+                  <mat-option value="cartao-credito">Cartão de Crédito</mat-option>
+                  <mat-option value="boleto">Boleto</mat-option>
+                  <mat-option value="pix">PIX</mat-option>
+
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col col-3">
               <mat-form-field appearance="outline">
                 <mat-label>Total Locação</mat-label>
                 <input matInput placeholder="Total Locação" formControlName="totalValue" prefix="R$ " mask="separator.2" thousandSeparator=".">
