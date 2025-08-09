@@ -256,16 +256,38 @@ export class CalendarTableComponent implements OnInit, AfterViewInit{
       end = item.endTime.substring(11,16)
       return start + ' - ' + end;
     }
+
+     
     
     showAddress(item){
-      
       let ret = [];
+
       if (item.noCadastre){
         return ''
       }else{
         ret.push(item.client.address + ', ' + item.client.number)
         ret.push(item.client.complement)
         ret.push(item.client.neighborhood)
+      }
+      
+      return ret.join(' - ');
+    }
+
+    formatarTelefone(valor: string): string {
+      
+      const apenasNumeros = valor.replace(/\D/g, '');
+      
+      return apenasNumeros
+        .replace(/^(\d{2})(\d)/, '($1)$2')       // Coloca DDD e abre parêntese
+        .replace(/(\d{1})(\d{4})(\d{4})$/, '$1 $2-$3'); // Espaço e hífen
+    }
+
+    showContact(item){
+      let ret = [];
+      if (item.noCadastre){
+        return ''
+      }else{
+        ret.push(this.formatarTelefone(item.client.cellPhone))
       }
       
       return ret.join(' - ');

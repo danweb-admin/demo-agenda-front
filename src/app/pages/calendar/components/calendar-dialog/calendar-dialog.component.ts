@@ -52,7 +52,7 @@ const moment = _rollupMoment || _moment;
     isLoadingEquipament = false;
     notFound = false;
     todayDate;
-    inputReadonly = true;
+    inputReadonly = false;
     semCadastro = false;
     @ViewChild('selectIcon') selectIcon;
     selectedtype: any;
