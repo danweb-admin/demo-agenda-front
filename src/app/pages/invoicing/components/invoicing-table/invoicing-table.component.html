@@ -1,0 +1,119 @@
+    <mat-card class="invoicing-table">
+        <mat-card-title class="invoicing-table__header">
+            <h5 class="invoicing-table__title">Faturamento</h5>
+        </mat-card-title>
+        <div class="row" style="margin-left: 20px;">
+            <div class="col">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="row invoicing-table-wrapper__search">
+                        <div class="invoicing-table-wrapper__separate">
+                            <input matInput class="invoicing-table-wrapper__search-input" [matDatepicker]="dp"  placeholder="Data Início" formControlName="startDate" (focus)="dp.open()">
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp></mat-datepicker>
+                        </div>
+                        
+                        <div class="invoicing-table-wrapper__separate">
+                            <input matInput class="invoicing-table-wrapper__search-input" [matDatepicker]="dp1"  placeholder="Data Final"  formControlName="endDate" (focus)="dp1.open()">
+                            <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+                            <mat-datepicker #dp1></mat-datepicker>
+                        </div>
+                        <div class="invoicing-table-wrapper__separate">
+                            <mat-select formControlName="status" class="invoicing-table-wrapper__search-input" placeholder="Status">
+                                <mat-option value="">Todos</mat-option>
+                                <mat-option value="1">Confirmada</mat-option>
+                                <mat-option value="2">Pendente</mat-option>
+                                <mat-option value="3">Cancelada</mat-option>
+                                <mat-option value="4">Excluida</mat-option>
+                                <mat-option value="5">Pré Agendada</mat-option>
+                            </mat-select>
+                        </div>
+                        
+                        
+                        <div class="invoicing-table-wrapper__separate">
+                            <mat-select formControlName="equipamentId" class="invoicing-table-wrapper__search-input" placeholder="Equipamento">
+                                <mat-option *ngFor="let item of equipamentResult" [value]="item.id">{{item.name}}</mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="invoicing-table-wrapper__separate">
+                            <input matInput placeholder="Busca Cliente" aria-label="State" [matAutocomplete]="auto"  formControlName="client" class="invoicing-table-wrapper__search-input1" style="margin-top: 3px;">
+                            
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                                <mat-option *ngIf="isLoading" class="is-loading">Carregando...</mat-option>
+                                <ng-container *ngIf="!isLoading">
+                                    <mat-option *ngFor="let option of clientResult" [value]="option">
+                                        <span>{{ option.name }} - {{option.city.nome}} - {{option.state.sigla}}</span>
+                                        
+                                    </mat-option>
+                                </ng-container>
+                            </mat-autocomplete>
+                            <span *ngIf="notFound">Não encontrado.</span>
+                        </div>
+                        
+                        <button mat-raised-button color="primary" [disabled]="!form.valid">Buscar</button>
+                        <button style="margin-left: 5px;" mat-raised-button color="second" [disabled]="disableButton" (click)="gerarPDF()">Gerar PDF</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <mat-card-content id="report">
+            <h3 *ngIf="!disableButton" style="margin-left: 25%;">
+                
+                <small style="font-weight: normal;">
+                    (Faturamento - Período: {{form.value.startDate | date:'dd/MM/yyyy'}} a {{form.value.endDate | date:'dd/MM/yyyy'}})
+                </small>
+            </h3>
+            <div *ngFor="let group of groupedData" class="mb-6 bloco-pdf">
+                <mat-card>
+                    <mat-card-title class="no-wrap">
+                        📅 {{ group.date | date:'dd/MM/yyyy' }}
+                    </mat-card-title>
+                    <mat-divider></mat-divider>
+                    <table class="full-width-table" border="1" cellspacing="0" cellpadding="5">
+                        <tr>
+                            <th>Locatário</th>
+                            <th>Equipamento</th>
+                            <th>Desconto</th>
+                            <th>Frete</th>
+                            <th>Outros</th>
+                            <th>Valor Locação</th>
+                            <th>Valor Total</th>
+                        </tr>
+                        
+                        <ng-container *ngFor="let item of group.items; let row">
+                            <!-- Primeira linha -->
+                            <tr>
+                                <td><strong>{{ item.clientName }}</strong></td>
+                                <td><strong>{{ item.equipmentName }}</strong></td>
+                                <td>{{ item.discount | currency:'BRL':'symbol':'1.2-2':'pt-BR'  }}</td>
+                                <td>{{ item.freight | currency:'BRL':'symbol':'1.2-2':'pt-BR'  }}</td>
+                                <td>{{ item.others | currency:'BRL':'symbol':'1.2-2':'pt-BR'  }}</td>
+                                <td>{{ item.value | currency:'BRL':'symbol':'1.2-2':'pt-BR'  }}</td>
+                                <td>{{ item.totalValue | currency:'BRL':'symbol':'1.2-2':'pt-BR'  }}</td>
+                            </tr>
+                            <!-- Segunda linha -->
+                            <tr class="sub-row">
+                                <td colspan="2"></td>
+                                <td colspan="2"><strong>Pagamento: {{ item.paymentStatus || '-' }}</strong> </td>
+                                <td colspan="2"><strong>Forma Pagamento: {{ item.paymentMethods || '-' }}</strong></td>
+                                <td colspan="2"><strong>Status: {{ item.status }}</strong> </td>
+                            </tr>
+                            <tr class="subtotal-row" *ngIf="group.items[group.items.length - 1] === row">
+                                <td colspan="6"><strong>Subtotal</strong></td>
+                                <td>{{ getSubTotal(group.items, 'totalValue') | currency:'BRL':'symbol':'1.2-2':'pt-BR'  }}</td>
+                            </tr>
+                            
+                        </ng-container>
+                    </table>
+                </mat-card>
+            </div>
+            <h6 *ngIf="!disableButton" style="margin-left: 20px;">
+                
+                <small style="font-weight: normal;">
+                    (Danweb Softwares - Informações Consultada em: {{ currentDateTime | date:'dd/MM/yyyy HH:mm:ss' }} - Período: {{form.value.startDate | date:'dd/MM/yyyy'}} a {{form.value.endDate | date:'dd/MM/yyyy'}})
+                </small>
+            </h6>
+        </mat-card-content>
+    </mat-card>
+    
+    

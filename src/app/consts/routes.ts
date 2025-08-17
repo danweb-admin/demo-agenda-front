@@ -21,6 +21,7 @@ export enum routes {
   CONSUMABLES = '/consumiveis',
   CALENDAR_CONSUMABLE = '/lancar-consumiveis',
   CLIENT_EQUIPMENT = '/equipamentos-cliente',
-  BULK_SCHEDULING = '/agenda-em-lote'
+  BULK_SCHEDULING = '/agenda-em-lote',
+  INVOICING = '/faturamento'
 
 }

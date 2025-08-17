@@ -127,6 +127,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/bulk-scheduling/bulk-scheduling.module' ).then(m => m.BulkSchedulingModule)
   },
   {
+    path: 'faturamento',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/invoicing/invoicing.module' ).then(m => m.InvoicingModule)
+  }, 
+  {
     path: '**',
     redirectTo: '404'
   }

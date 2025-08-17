@@ -101,6 +101,13 @@ export class CalendarService {
       return resp;
     }))
   }
+
+  invoicing(startDate: string, endDate: string, clientId: string, equipamentId: string, status: string): Observable<any[]>{
+    return this.http.get(`${environment.URL_API}${URL_CALENDARS}/report?DataInicial=${startDate}&DataFinal=${endDate}&ClientId=${clientId}&EquipamentId=${equipamentId}&status=${status}`)
+    .pipe(map((resp: Calendar[]) => {
+      return resp;
+    }));
+  }
 }
 
 
