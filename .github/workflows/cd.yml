@@ -21,12 +21,13 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v5
+    - name: build image and push to docker hub
+      uses: docker/build-push-action@v1.1.0
       with:
-        push: true
-        tags: williambr2022/demo-agenda-front:${{ github.sha }},williambr2022/demo-agenda-front:latest
-
+        username: williambr2022
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: williambr2022/demo-agenda-front
+        tags: ${{ github.sha }}, latest
 
   deploy:
     name: Deploy
