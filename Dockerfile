@@ -12,7 +12,7 @@ RUN npm install -g npm@8
 
 # Instalar dependências (usando lockfile)
 # Se ainda der erro de resolução, adicione --legacy-peer-deps no final
-RUN npm ci
+RUN npm ci --force
 
 # Copiar código do projeto
 COPY . .
