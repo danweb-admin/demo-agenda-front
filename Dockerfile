@@ -18,7 +18,7 @@ RUN npm ci --force
 COPY . .
 
 # Build do Angular (pode ajustar --configuration=production se precisar)
-RUN npm run build -- --configuration production
+RUN npm run build 
 
 # Etapa final (servidor nginx para servir os arquivos estáticos)
 FROM nginx:alpine
