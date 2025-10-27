@@ -17,13 +17,25 @@
             </div>
           </div>
           <div class="row">
-            <div class="col col-3">
+            <div class="col col-4">
               <mat-form-field appearance="outline">
                 <mat-label>Ordem</mat-label>
                 <input matInput placeholder="Ordem" formControlName="order" type="number">
               </mat-form-field>
             </div>
-            <div class="col col-3">
+            
+            <div class="col col-4">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Cor</mat-label>
+                <mat-select formControlName="color">
+                  <mat-option *ngFor="let color of cores" [value]="color.hex">
+                    <span class="color-box" [style.background]="color.hex"></span>
+                    {{ color.nome }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col col-4">
               <mat-checkbox class="checkbox" formControlName="active" checked="form.value.active" >Ativo</mat-checkbox>
             </div>
           </div>
@@ -57,7 +69,7 @@
               </mat-form-field>
             </div>
             <div class="col col-3">
-                <mat-checkbox formControlName="active" checked="form.value.active" >Ativo</mat-checkbox>
+              <mat-checkbox formControlName="active" checked="form.value.active" >Ativo</mat-checkbox>
             </div>
           </div>
         </div>
