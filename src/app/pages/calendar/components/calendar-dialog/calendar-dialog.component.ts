@@ -589,10 +589,10 @@ const moment = _rollupMoment || _moment;
 			});
 
       const others = this.form.get('others').value;
-      const others_ = parseFloat(others.replace(',','.'));
+      const others_ = parseFloat(others.toString().replace(',','.'));
       
       const value = this.form.get('value').value;
-      const value_ = parseFloat(value.replace(',','.'));
+      const value_ = parseFloat(value.toString().replace(',','.'));
 
       const freight_ = parseFloat(freight.toString().replace(',', '.'));
       const discount_ = parseFloat(discount.toString().replace(',', '.'));

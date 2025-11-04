@@ -80,6 +80,7 @@ import { Guid } from 'guid-typescript';
     createForm(){
       this.id = this.data.element;
       this.isAddMode = !this.id;
+      console.log(this.data)
       this.form = this.formBuilder.group({
         id:  [this.data.element?.id || ''],
         name: [this.data.element?.name || '', Validators.required],
@@ -479,7 +480,9 @@ import { Guid } from 'guid-typescript';
     ajustesCSS(){
       var mat_select = document.getElementsByClassName('mat-select');
       var mat_dialog = document.getElementsByClassName('mat-dialog-content');
-      mat_dialog[0].setAttribute('style','overflow-y: hidden');
+      if (mat_dialog.length > 0){
+        mat_dialog[0].setAttribute('style','overflow-y: hidden');
+      }
       for (var i = 0; i < mat_select.length; i++) {
         mat_select[i].setAttribute('style', 'display: contents');
       }

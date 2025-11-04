@@ -132,6 +132,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/invoicing/invoicing.module' ).then(m => m.InvoicingModule)
   }, 
   {
+    path: 'tabela-preco',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/price-table/price-table.module' ).then(m => m.PriceTableModule)
+  }, 
+  {
     path: '**',
     redirectTo: '404'
   }

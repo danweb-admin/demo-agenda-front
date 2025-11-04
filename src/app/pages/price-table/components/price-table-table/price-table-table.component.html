@@ -1,0 +1,67 @@
+<mat-card class="client-table">
+    <mat-card-title class="client-table__header">
+        <h5 class="client-table__title">Tabela de Preço</h5>
+    </mat-card-title>
+    
+    <mat-card-content >
+        
+        
+        <mat-accordion>
+            <form [formGroup]="form">
+                <div formArrayName="equipamentos">
+                    <mat-expansion-panel
+                    *ngFor="let eq of equipamentosFormArray.controls; let i = index"
+                    [formGroupName]="i"
+                    >
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>{{ eq.get('nome')?.value }}</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    
+                    <div formArrayName="valores">
+                        <div
+                        *ngFor="let val of getValores(i).controls; let j = index"
+                        [formGroupName]="j"
+                        class="flex items-center gap-2 mb-2"
+                        >
+                        <mat-form-field appearance="outline" class="flex-1">
+                            <mat-label>Tempo</mat-label>
+                            <input matInput formControlName="minutes" mask="Hh:m0"/>
+                        </mat-form-field>
+                        
+                        <mat-form-field appearance="outline" class="w-32">
+                            <mat-label>Valor</mat-label>
+                            <input matInput placeholder="Valor" formControlName="value" prefix="R$ " mask="separator.2" thousandSeparator="." >
+                            
+                        </mat-form-field>
+                        
+                        <!-- opcional: botão para remover -->
+                        <button mat-icon-button color="warn" type="button" (click)="getValores(i).removeAt(j)" matTooltip="Remover">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                </div>
+            </div>
+            
+            <button mat-stroked-button color="primary" type="button" (click)="adicionarPreco(i)">
+                <mat-icon>add</mat-icon>
+            Adicionar Valor
+        </button>
+    </mat-expansion-panel>
+</div>
+</form>
+
+<div class="mt-4">
+    <button mat-raised-button color="primary" (click)="salvar()">
+        Salvar tudo
+    </button>
+</div>
+</mat-accordion>
+
+
+
+
+
+
+</mat-card-content>
+
+</mat-card>
+
