@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { EquipamentsService } from 'src/app/shared/services/equipaments.service';
 import { PriceTableService } from 'src/app/shared/services/price-table.service';
 
@@ -9,40 +10,41 @@ import { PriceTableService } from 'src/app/shared/services/price-table.service';
   styleUrls: ['./price-table-table.component.scss']
 })
 export class PriceTableTableComponent implements OnInit {
-
+  
   form!: FormGroup;
   equipamentos: any[] = [];
-
+  
   constructor(
     private fb: FormBuilder,
     private equipamentoService: EquipamentsService,
+    private toastr: ToastrService,
     private priceTableService: PriceTableService
   ) {}
-
+  
   ngOnInit(): void {
     this.form = this.fb.group({
       equipamentos: this.fb.array([]),
     });
-
+    
     // 1️⃣ Buscar todos os equipamentos
     this.equipamentoService.loadEquipaments(true).subscribe((equipamentos) => {
       this.equipamentos = equipamentos;
-
+      
       const formArray = this.form.get('equipamentos') as FormArray;
-
+      
       equipamentos.forEach((eq) => {
         const grupo = this.fb.group({
           id: [eq.id],
           nome: [eq.name],
           valores: this.fb.array([]),
         });
-
+        
         formArray.push(grupo);
-
+        
         // 2️⃣ Buscar os preços de cada equipamento
         this.priceTableService.loadPriceTable(eq.id).subscribe((precos) => {
           const valoresArray = grupo.get('valores') as FormArray;
-
+          
           precos.forEach((p: any) => {
             valoresArray.push(
               this.fb.group({
@@ -58,16 +60,16 @@ export class PriceTableTableComponent implements OnInit {
     });
   }
 
-  // 🔹 Getters de conveniência
+
+  
   get equipamentosFormArray(): FormArray {
     return this.form.get('equipamentos') as FormArray;
   }
-
+  
   getValores(equipamentoIndex: number): FormArray {
     return this.equipamentosFormArray.at(equipamentoIndex).get('valores') as FormArray;
   }
-
-  // 🔹 Adicionar novo preço manualmente
+  
   adicionarPreco(equipamentoIndex: number) {
     const valoresArray = this.getValores(equipamentoIndex);
     let equipamento = this.equipamentos[equipamentoIndex];
@@ -81,11 +83,11 @@ export class PriceTableTableComponent implements OnInit {
       })
     );
   }
-
+  
   // 🔹 Salvar tudo (faz as conversões HH:mm → minutos e R$ → número)
   salvar() {
     const formValue = this.form.value;
-
+    
     const payload = formValue.equipamentos.map((eq: any) => ({
       id: eq.id,
       valores: eq.valores.map((v: any) => ({
@@ -95,15 +97,17 @@ export class PriceTableTableComponent implements OnInit {
         value: this.converterMoedaParaNumero(v.value),
       })),
     }));
-
-    console.log('Payload para backend:', payload);
-
+    
+    
     // Envie para o backend:
     this.priceTableService.save(payload).subscribe(() => {
-      alert('Preços salvos com sucesso!');
+      this.toastr.success('Tabela de Preço atualizada.');
+      setTimeout(() => {
+        window.location.reload()
+      },1000);
     });
   }
-
+  
   // 🕒 Conversões de tempo
   private converterMinutosParaHoraString(minutos: number): string {
     if (minutos == null) return '';
@@ -111,7 +115,7 @@ export class PriceTableTableComponent implements OnInit {
     const mins = minutos % 60;
     return `${horas.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
   }
-
+  
   private converterHoraStringParaMinutos(horaStr: string): number {
     
     if (!horaStr) return 0;
@@ -119,24 +123,24 @@ export class PriceTableTableComponent implements OnInit {
     const [h, m] = formatado.split(':').map(Number);
     return (h * 60) + (m || 0);
   }
-
+  
   // 💰 Conversões de valor
   private converterNumeroParaMoeda(valor: number): string {
     
     if (valor == null) return 'R$ 0,00';
-
+    
     return Number(valor).toFixed(2).toString().replace('.',',');
   }
-
+  
   private converterMoedaParaNumero(valor: string): number {
     
     if (!valor) return 0;
     return Number(
       valor
-        .toString()
-        .replace('R$', '')
-        .replace(',', '.')
-        .trim()
+      .toString()
+      .replace('R$', '')
+      .replace(',', '.')
+      .trim()
     );
   }
 }

@@ -13,20 +13,27 @@ const URL_PRICE_TABLE = '/api/v1/price-table';
 export class PriceTableService {
   
   constructor(private http: HttpClient){
-
+    
   }
-
+  
   loadPriceTable(equipmentId: string): Observable<any[]> {
     return this.http.get(`${environment.URL_API}${URL_PRICE_TABLE}?equipmentId=${equipmentId}`)
     .pipe(map((resp: any[]) => {
       return resp;
     }));
   }
-
+  
   save(valores: any): Observable<any>{
-      
+    
     return this.http.post(`${environment.URL_API}${URL_PRICE_TABLE}`,valores)
     .pipe(map((resp: any) => {
+      return resp;
+    }));
+  }
+  
+  getValueByEquipament(equipamentId: string, startTime: string, endTime: string): Observable<number> {
+    return this.http.get(`${environment.URL_API}${URL_PRICE_TABLE}/value-by-equipment?equipmentId=${equipamentId}&startTime=${startTime}&endTime=${endTime}`)
+    .pipe(map((resp: number) => {
       return resp;
     }));
   }

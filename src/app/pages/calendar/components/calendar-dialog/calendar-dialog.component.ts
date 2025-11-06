@@ -22,6 +22,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from 'src/app/consts/my-format';
 import { Consumable } from 'src/app/shared/models/consumable';
 import { ConsumablesService } from 'src/app/shared/services/consumables.service';
+import { PriceTableService } from 'src/app/shared/services/price-table.service';
 
 const moment = _rollupMoment || _moment;
 
@@ -86,6 +87,7 @@ const moment = _rollupMoment || _moment;
       private equipamentService: EquipamentsService,
       private personService: PersonService,
       private specificationService: SpecificationsService,
+      private priceTableService: PriceTableService,
       private consumablesService: ConsumablesService,
       private cdr: ChangeDetectorRef) {
         this.todayDate = new Date();
@@ -552,7 +554,9 @@ const moment = _rollupMoment || _moment;
       var ret = this.onBlur(input);
       
       if (ret){
-        this.clientService.getValueByEquipament(this.form.value.client.id,this.form.value.equipamentId, this.form.value.startTime1, this.form.value.endTime1).subscribe((resp: number) => {
+      
+        this.priceTableService.getValueByEquipament(this.form.value.equipamentId, this.form.value.startTime1, this.form.value.endTime1).subscribe((resp: number) => {
+          
           for (const field in this.form.controls) { 
             if (field == "value" || field == "totalValue"){
               
