@@ -1,0 +1,112 @@
+<mat-card class="client-table">
+    <mat-card-title class="client-table__header">
+        <h5 class="client-table__title">Contratos</h5>
+    </mat-card-title>
+    
+    <mat-card-content >
+        <form [formGroup]="form">
+            <input type="hidden" formControlName="clientId">
+            <div class="row">
+                <div class="col col-2">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Locatário(a)</mat-label>
+                        <input matInput placeholder="Busca Locatário(a)"  aria-label="State" [matAutocomplete]="auto"  formControlName="client">
+                        
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                            <mat-option *ngIf="isLoading" class="is-loading">Carregando...</mat-option>
+                            <ng-container *ngIf="!isLoading">
+                                <mat-option *ngFor="let option of clientResult" [value]="option">
+                                    <span>{{ option.name }} - {{option.city.nome}} - {{option.state.sigla}}</span>
+                                    
+                                </mat-option>
+                            </ng-container>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <span *ngIf="notFound">Não encontrado.</span>
+                </div>
+                <div class="col col-2">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Equipamento</mat-label>
+                        <mat-select formControlName="equipmentId" >
+                            <mat-option *ngFor="let item of equipmentResult" [value]="item.id">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            
+            
+            <div class="row">
+                
+                
+                <div class="col col-2">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Data Início</mat-label>
+                        <input matInput [matDatepicker]="dp" [min]="todayDate" placeholder="Data Início" formControlName="startDate" (focus)="dp.open()">
+                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                        <mat-datepicker #dp></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col col-2">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Data Fim</mat-label>
+                        <input matInput [matDatepicker]="dp1" [min]="todayDate" placeholder="Data Fim" formControlName="endDate" (focus)="dp1.open()">
+                        <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+                        <mat-datepicker #dp1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            
+            <div class="row">
+                <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="buscarLocacoes()" style="float: right;">Buscar Locações</button>
+                
+            </div>
+        </form>
+        
+        <div class="table-container" *ngIf="locacoes?.length > 0">
+            <table class="locacoes-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input
+                            type="checkbox"
+                            (change)="selecionarTodos($event)"
+                            />
+                        </th>
+                        <th>Locatário</th>
+                        <th>Data da Locação</th>
+                        <th>Hora Início</th>
+                        <th>Hora Fim</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr *ngFor="let locacao of locacoes">
+                        <td>
+                            <input
+                            type="checkbox"
+                            [(ngModel)]="locacao.selecionado"
+                            />
+                        </td>
+                        <td>{{ locacao.client.name }}</td>
+                        <td>{{ locacao.date | date:'dd/MM/yyyy' }}</td>
+                        <td>{{ locacao.startTime | date:'HH:mm'}}</td>
+                        <td>{{ locacao.endTime | date:'HH:mm' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div *ngIf="locacoes?.length === 0" class="empty-state">
+            Nenhuma locação encontrada.
+        </div>
+        
+        <div *ngIf="locacoes?.length != 0" class="row" style="margin-top: 15px;">
+            <button mat-raised-button color="primary" (click)="generateContract()">Gerar</button>
+            <button mat-raised-button color="basic"  (click)="downloadContract()">Download</button>
+            <button mat-raised-button color="basic"  (click)="digitalSignature()" style="background-color: lightgreen;">Enviar P/ Assinatura</button>
+            <button mat-raised-button color="basic" (click)="history()" style="background-color: cornsilk;">Histórico Assinatura</button>
+        </div>
+
+    </mat-card-content>
+</mat-card>
+

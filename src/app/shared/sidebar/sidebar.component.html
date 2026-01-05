@@ -58,6 +58,9 @@
         <mat-list-item *ngIf="isAdmin" class="ui-element" [style.display]="isOpenContracts ? 'flex' : 'none'"  routerLink="{{routes.CONTRACTS}}" routerLinkActive="active">
           <div class="circle"></div>Gerar Contratos
         </mat-list-item>
+        <mat-list-item *ngIf="isAdmin" class="ui-element" [style.display]="isOpenContracts ? 'flex' : 'none'"  routerLink="{{routes.CONTRACTS_ANUAL}}" routerLinkActive="active">
+          <div class="circle"></div>Contratos Anuais
+        </mat-list-item>
         
       </div>
   <mat-list-item routerLink="{{routes.TYPOGRAPHY}}" routerLinkActive="active" [style.display]="'none'">

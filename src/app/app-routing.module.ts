@@ -107,6 +107,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/generate-contract/generate-contract.module' ).then(m => m.GenerateContractModule)
   },
   {
+    path: 'gerar-contratos-anual',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/generate-contract-anual/generate-contract-anual.module' ).then(m => m.GenerateContractAnualModule)
+  },
+  {
     path: 'consumiveis',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/consumables/consumables.module' ).then(m => m.ConsumablesModule)

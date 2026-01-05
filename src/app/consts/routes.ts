@@ -17,6 +17,7 @@ export enum routes {
   USER = '/usuario',
   USERS = '/usuarios',
   CONTRACTS = '/gerar-contratos',
+  CONTRACTS_ANUAL = '/gerar-contratos-anual',
   MODEL_CONFIGURATION = '/configuracao-modelo',
   CONSUMABLES = '/consumiveis',
   CALENDAR_CONSUMABLE = '/lancar-consumiveis',

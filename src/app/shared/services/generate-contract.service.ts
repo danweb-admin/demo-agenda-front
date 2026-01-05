@@ -34,12 +34,28 @@ export class GenerateContractService {
     }));
   }
 
+  generateMultipleContracts(ids: string): any{
+    
+
+    return this.http.get(`${environment.URL_API}${URL_GENERATE_CONTRACT}/multiple-contratos?ids=${ids}`)
+    .pipe(map((resp: any) => {
+      return resp;
+    }));
+  }
+
   downloadContract(id) {
     return this.http.get(`${environment.URL_API}${URL_GENERATE_CONTRACT}/download-contract?id=${id}`, { responseType: 'blob' });
   }
 
   digitalSignature(id) {
     return this.http.get(`${environment.URL_API}${URL_DIGITAL_SIGNATURE}/?calendarId=${id}`)
+    .pipe(map((resp: any) => {
+      return resp;
+    }));
+  }
+
+  getLocacoes(clientId: string, equipmentId: string, startDate: string, endDate: string) {
+    return this.http.get(`${environment.URL_API}${URL_GENERATE_CONTRACT}/busca-locacoes?cliendId=${clientId}&equipmentId=${equipmentId}&startDate=${startDate}&endDate=${endDate}`)
     .pipe(map((resp: any) => {
       return resp;
     }));

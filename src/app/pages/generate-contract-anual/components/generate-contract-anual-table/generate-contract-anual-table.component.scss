@@ -1,0 +1,55 @@
+mat-form-field {
+    width: 100%;
+}
+
+mat-select {
+  display: 'contents' !important;
+}
+
+.date-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr); /* Exibe exatamente 8 itens por linha */
+  gap: 10px; /* Espaçamento entre os itens */
+}
+
+.date-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.table-container {
+  margin-top: 24px;
+  overflow-x: auto;
+}
+
+.locacoes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.locacoes-table th,
+.locacoes-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.locacoes-table th {
+  font-weight: 600;
+  background-color: #f7f7f7;
+}
+
+.locacoes-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.empty-state {
+  margin-top: 32px;
+  color: #888;
+  text-align: center;
+}
