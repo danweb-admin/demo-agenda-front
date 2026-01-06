@@ -16,6 +16,7 @@ import { ClientsService } from 'src/app/shared/services/clients.service';
 import { debounceTime, filter, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { EquipamentsService } from 'src/app/shared/services/equipaments.service';
+import { SignatureHistoryComponent } from 'src/app/pages/generate-contract/components/signature-history/signature-history.component';
 
 
 @Component({
@@ -209,22 +210,40 @@ export class GenerateContractAnualTableComponent implements OnInit, AfterViewIni
     }
     
     digitalSignature(){
-        // this.generateContractService.digitalSignature(item.id)
-        // .subscribe((resp: any) => {
-        //     this.toastr.success('Contrato enviado para Assinatura Digital com sucesso.');
-        //     // this.dataSource = resp; 
-        // },
-        // (error: any) =>{
-        //     console.log(error)
-        // });
+        const selecionadas = this.getLocacoesSelecionadas();
+
+        if (selecionadas.length === 0) {
+            alert('Selecione pelo menos uma locação');
+            return;
+        }
+
+        let first = selecionadas[0];
+
+        this.generateContractService.digitalSignature(first.id)
+        .subscribe((resp: any) => {
+            this.toastr.success('Contrato enviado para Assinatura Digital com sucesso.');
+            // this.dataSource = resp; 
+        },
+        (error: any) =>{
+            console.log(error)
+        });
     }
     
     history(): void {
-        // const dialogRef = this.dialog.open(SignatureHistoryComponent, {
-        //   width: '900px',
-        //   height: '600px',
-        //   data: {item}
-        // });
+        const selecionadas = this.getLocacoesSelecionadas();
+
+        if (selecionadas.length === 0) {
+            alert('Selecione pelo menos uma locação');
+            return;
+        }
+
+        let first = selecionadas[0];
+
+        const dialogRef = this.dialog.open(SignatureHistoryComponent, {
+          width: '900px',
+          height: '600px',
+          data: {first}
+        });
         
     }
     
