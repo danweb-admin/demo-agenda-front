@@ -8,10 +8,9 @@ import { GenerateContractService } from 'src/app/shared/services/generate-contra
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from "file-saver";
 import { MatDialog } from '@angular/material/dialog';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Equipament } from 'src/app/shared/models/equipament';
 import { Specification } from 'src/app/shared/models/specification';
-import { EquipamentSpecifications } from 'src/app/shared/models/equipamentSpecifications';
 import { ClientsService } from 'src/app/shared/services/clients.service';
 import { debounceTime, filter, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -76,7 +75,7 @@ export class GenerateContractAnualTableComponent implements OnInit, AfterViewIni
     }
     
     getEquipaments(): void{
-        this.equipmentService.loadEquipaments(true).subscribe((resp: Equipament[]) => {
+        this.equipmentService.loadEquipmentRelationship(true).subscribe((resp: Equipament[]) => {
             this.equipmentResult = resp;
         })
     }

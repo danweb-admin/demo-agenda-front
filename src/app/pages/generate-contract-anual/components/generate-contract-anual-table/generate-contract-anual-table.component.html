@@ -76,6 +76,8 @@
                         <th>Data da Locação</th>
                         <th>Hora Início</th>
                         <th>Hora Fim</th>
+                        <th>Aparelho</th>
+
                     </tr>
                 </thead>
                 
@@ -91,6 +93,7 @@
                         <td>{{ locacao.date | date:'dd/MM/yyyy' }}</td>
                         <td>{{ locacao.startTime | date:'HH:mm'}}</td>
                         <td>{{ locacao.endTime | date:'HH:mm' }}</td>
+                        <td>{{ locacao.equipament.name }}</td>
                     </tr>
                 </tbody>
             </table>

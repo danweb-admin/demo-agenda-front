@@ -7,6 +7,7 @@ import { Equipament } from '../models/equipament';
 import { Specification } from '../models/specification';
 
 const URL_EQUIPAMENTS = '/api/v1/equipaments';
+const URL_EQUIPMENT_RELATIONSHIP = '/api/v1/equipment-relationship';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,13 @@ export class EquipamentsService {
 
   loadEquipaments(ativo: boolean): Observable<Equipament[]> {
     return this.http.get(`${environment.URL_API}${URL_EQUIPAMENTS}?ativo=${ativo}`)
+    .pipe(map((resp: Equipament[]) => {
+      return resp;
+    }));
+  }
+
+  loadEquipmentRelationship(ativo: boolean): Observable<Equipament[]> {
+    return this.http.get(`${environment.URL_API}${URL_EQUIPMENT_RELATIONSHIP}?ativo=${ativo}`)
     .pipe(map((resp: Equipament[]) => {
       return resp;
     }));

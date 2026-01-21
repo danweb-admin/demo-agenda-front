@@ -119,7 +119,7 @@ export class BulkSchedulingTableComponent implements AfterViewInit {
     }
     
     getEquipaments(): void{
-      this.equipmentService.loadEquipaments(true).subscribe((resp: Equipament[]) => {
+      this.equipmentService.loadEquipmentRelationship(true).subscribe((resp: Equipament[]) => {
         this.equipmentResult = resp;
       })
     }
